@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-img" style="background-image: url('https://static.parade.com/wp-content/uploads/2019/12/goals-quotes.jpg');">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/td/goals">Goals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}">
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/post-page/{{request.session.user_id}}}">
+                        Posts
+                    </a>
+                </li>
+            </ul>
+            <p class="mt-2">
+                Welcome, {{request.session.first_name}}  |   
+                <a href="/logout" class="me-4 text-blue">Log-Off</a>
+            </p>
+        </div>
+    </nav>
+    <p class="container border border-1 border-dark p-2 rounded">
+        <span class="fw-bold fs-5">All users:</span> 
+        <span class="fst-italic fw-lighter">
+            (Only Logged-Users can render this page with a GET request if they are currently logged in.)
+        </span>
+        Users can edit thier own profile through the navigation bar above(profile). 
+        Users can also go to another users Posts-page by clicking on the respective username.
+        Once a goal is accomplished, click achieve and it will be added to the last table of 
+        "achieved-goals by all-users." 
+    </p>
+    <div class="container d-grid d-md-flex p-4 justify-content-md-end">
+        <a href="/create-goal" role="button" class="btn btn-lg btn-primary text-center me-md-2 fw-bold p-2 rounded">Create a Goal</a>
+    </div>
+    <h1 class="container text-white text-center fw-bold mt-4">Lets Make it Happen!</h1>
+    <h4 class="text-center text-white  fst-italic mt-4">(Add to list of goals or dreams by "creating a goal")</h4>
+    <table class="container mt-5 table table-striped table-hover bg-light rounded">
+        <tr>
+            <th>Goal</th>
+            <th>Added on</th>
+            <th>Actions</th>
+        {% for goals in user.dreams_made.all %}
+            {% if not goals in user.dreams_acheived.all %}
+        </tr>
+        <tr>
+            <td>{{goals.goal}}</td>
+            <td class="fw-lighter">{{goals.created_at}}</td>
+            <td class="col-2">
+                <a href="/wishes/edit/{{wishes.id}}">Edit</a> |
+                <a href="/goals/{{goals.id}}/achieved">Achieve!</a>
+            </td>
+            {% endif %}
+        {% endfor %}
+        </tr>
+    </table>
+    <h1 class="text-center text-white fw-bold mt-5">Goals Achieved:</h1>
+        <table class="container mt-5 table table-striped table-hover bg-light rounded">
+            <tr>
+                <th>Goal</th>
+                <th>Dreamer</th>
+                <th>Date added</th>
+                <th>Date Achieved</th>
+            </tr>
+    {% for user in all_users %}
+        {% for goal in user.dreams_acheived.all %}
+            <tr>
+                <td>{{goal.goal}}</td>
+                <td>{{goal.dreamer.first_name}} {{goal.dreamer.last_name}}</td>
+                <td class="fw-lighter">{{goal.created_at}}</td>
+                <td class="fw-bold text-success">{{goal.updated_at}}</td>
+        {% endfor %}
+    {% endfor %}
+            </tr>
+        </table>
+</body>
+</html>

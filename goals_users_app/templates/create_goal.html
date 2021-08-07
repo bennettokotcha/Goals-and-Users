@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create A Goal</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-img" style="background-image: url('https://static.parade.com/wp-content/uploads/2019/12/goals-quotes.jpg');">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/td/goals">Goals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}">
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/post-page/{{request.session.user_id}}}">
+                        Posts
+                    </a>
+                </li>
+            </ul>
+            <p class="mt-2">
+                Welcome, {{request.session.first_name}}  |   
+                <a href="/logout" class="me-4 text-blue">Log-Off</a>
+            </p>
+        </div>
+    </nav>
+    <p class="container border border-1 border-dark p-2 mb-3 rounded">
+        <span class="fw-bold fs-5">All users:</span> 
+        <span class="fst-italic fw-lighter">
+            (Only Logged-Users can render this page with a GET request if they are currently logged in.)
+        </span>
+        Users can create a goal and upon creation the user will be sent back to Goals-page. Validations for
+        the created goal exist in terms of character length(must be 3 characters) 
+    </p>
+    <div class="container d-grid d-md-flex p-4 justify-content-md-end">
+        <a href="/td/goals" role="button" class="btn btn-lg btn-primary text-center me-md-2 fw-bold p-2 rounded">Return to Goals</a>
+    </div>
+    <h1 class="container text-center text-white p-2 fs-1 fw-bolder mt-4">Whats your next goal?!</h1>
+    <h4 class="container text-center text-white mb-5 fst-italic">(create your goal below)</h4>
+    {% if messages %}
+    <ul class='container justify-content-center'>
+        {% for message in messages %}
+        <li class='text-danger' {% if message.tags %} class="{{message.tags}}"{% endif %}>{{message}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form class="container col-5 bg-light mt-5 p-3 rounded" action="/create-goal/process" method="POST">
+        {% csrf_token %}
+        <h3 class="container fw-bold text-center mt-3 mb-4">Lets make this thing official!</h3>
+        <input class="container form-control text-secondary text-wrap" value="Create your next goal here" name="goal" style="height:135px; width:65%;"></input>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+            <button type="reset" class="btn-danger text-center col-3 p-2 fw-bold rounded">Cancel</button>
+            <button type="submit" class="btn-success text-center col-3 p-2 fw-bold rounded">Create</button>
+        </div>
+    </form>
+</body>
+</html>

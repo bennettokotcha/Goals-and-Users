@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary mb-4 text-light">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">User-Dashboard</a>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/admin">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}}">Profile</a>
+                </li>
+            </ul>
+            <p class="mt-2">
+                Welcome, {{request.session.user_name}}  |   
+                <a href="/logout" class="me-4 text-white">Log-Off</a>
+            </p>
+        </div>
+    </nav>
+    <div class="container mt-5 bg-light rounded">
+        <h1 class="mb-3">{{show_user.first_name}} {{show_user.last_name}}</h1>
+        <p class="p-2 mb-2 fst-italic text-primary">Registered at: <span class="fst-normal  text-dark fw-bold">{{show_user.created_at}}</span></p>
+        <p class="p-2 mb-2 fst-italic text-primary">User ID: <span class="fst-normal  text-dark fw-bold">{{show_user.id}}</span></p>
+        <p class="p-2 mb-2 fst-italic text-primary">Email address: <span class="fst-normal  text-dark fw-bold">{{show_user.email}}</span></p>
+        <p class="p-2 mb-2 fst-italic text-primary">Description: <span class="fs-4  text-dark">{{show_user.desc}}</span></p>
+    </div>
+    
+    <form action="/add-post/{{show_user.id}}" method="POST" class="container bg-dark text-white rounded p-5 mt-4">
+        {% csrf_token %}
+        <label for="message" class="form-label">
+            <h2>Leave a message for {{show_user.first_name}}: </h2>
+        </label>
+        <input type="text" class="form-control" name="message">
+    
+        <button type="submit" class="container mt-3 mb-5 btn-success text-center col-1 p-2 rounded me-5">Post</button>
+    </form>
+    <div class="container bg-light p-2 mt-4">
+        {% for post in all_posts %}
+            {% if post in show_user.added_posts.all %}
+        <p class="fs-5 fw-bolder fst-italic mb-5">
+            {{post.posted_by.first_name}} {{post.posted_by.last_name}} wrote:
+            <br>
+            <span class="fw-normal fs-6 fst-normal">- {{post.message}} **</span>
+            <span class="fw-light fs-6 fst-normal text-success ms-5">{{post.created_at}}</span>
+        </p>
+            {% endif %}
+        {% endfor %}
+</html>
