@@ -20,18 +20,18 @@
                     <a class="nav-link" href="/td/goals">Goals</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/edit/{{request.session.user_id}">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}}">
                         Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/post-page/{{request.session.user_id}}}">
+                    <a class="nav-link" href="/users/posts/{{request.session.user_id}}">
                         Posts
                     </a>
                 </li>
             </ul>
             <p class="mt-2">
-                Welcome, {{request.session.first_name}}  |   
+                Welcome, {{request.session.user_name}}   |   
                 <a href="/logout" class="me-4 text-blue">Log-Off</a>
             </p>
         </div>

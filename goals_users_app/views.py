@@ -11,9 +11,24 @@ def login_page(request):
     return render(request, 'login.html')
 
 def create_goal_page(request):
+    if not 'user_name' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/login')
     return render(request, 'create_goal.html')
 
+def edit_goal_page(request, id):
+    if not 'user_name' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/login')
+    context = {
+        'goal' : Goal.objects.get(id=id),
+    }
+    return render(request, 'edit_goal.html', context)
+
 def userdashboard_page(request):
+    if not 'user_name' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/login')
     user = User.objects.get(id=request.session['user_id'])
     context = {
             'all_users': User.objects.all(),
@@ -31,25 +46,13 @@ def goals_page(request):
     }
     return render(request, 'goals.html', context)
     
-
 def user_edit_page(request, id):
     if request.session['user_id'] == id:
         context = {
             'user': User.objects.get(id=id)
         } 
         return render(request, 'edit_profile.html', context)
-    return redirect('/dashboard/admin')
-
-def admin_edit_page(request, id):
-    user1 = User.objects.get(id=id)
-    # print(user1.user_level, user1.first_name)
-    users = User.objects.all()    
-    if request.session['user_id'] == id or user1.user_level is True:
-        context = {
-            'user': User.objects.get(id=id)
-        }
-        return render(request, 'edit_user.html', context)
-    return redirect('/dashboard/admin')
+    return redirect('/login')
 
 def posts_page(request, id):
     show_user = User.objects.get(id=id)
@@ -138,6 +141,23 @@ def achieve_goal(request, id):
         goal.save()
         return redirect('/td/goals')
 
+def edit_goal(request, id):
+    errors = Goal.objects.goal_validator(request.POST)
+    if len(errors) > 0 :
+        for k, v in errors.items():
+            messages.error(request, v)
+        return redirect(f'/goals/{id}/edit')
+
+    goal = Goal.objects.get(id=id)
+    goal.goal = request.POST['goal']
+    goal.save()
+    return redirect('/td/goals')
+
+def delete_goal(request, id):
+    goal = Goal.objects.get(id=id)
+    goal.delete()
+    return redirect('/td/goals')
+
 def edit_info_proccess(request, id):
     if request.method == 'POST':
         this_user = User.objects.get(id=id)
@@ -154,9 +174,10 @@ def edit_info_proccess(request, id):
         this_user = User.objects.get(id=id)
         this_user.first_name = request.POST['first_name']
         this_user.last_name = request.POST['last_name']
+        this_user.username = request.POST['username']
         this_user.email = request.POST['email']
         this_user.save()
-        return redirect('/dashboard/admin')
+        return redirect('/userdashboard')
     return redirect('/')
 
 def edit_password_proccess(request, id):
@@ -174,7 +195,7 @@ def edit_password_proccess(request, id):
         this_user.password = pw_hash
         this_user.confirm_pw = request.POST['confirm_pw']
         this_user.save()
-        return redirect('/dashboard/admin')
+        return redirect('/userdashboard')
     return redirect('/')
 
 def edit_desc_proccess(request, id):
@@ -182,46 +203,8 @@ def edit_desc_proccess(request, id):
         this_user = User.objects.get(id=id)
         this_user.desc = request.POST['desc']
         this_user.save()
-        return redirect('/dashboard/admin')
+        return redirect('/userdashboard')
 
-def edit_user_info(request, id):
-    if request.method == 'POST':
-        this_user = User.objects.get(id=id)
-        errors = User.objects.info_edit_validator(request.POST)
-        if not request.POST['email'] == this_user.email:
-            user = User.objects.filter(email = request.POST['email'])
-            if user:
-                messages.error(request, 'Email already exist, please register with a different email address!')
-                return redirect(f'/admin/edit/{id}')
-        if len(errors) > 0 :
-            for k, v in errors.items():
-                messages.error(request, v)#extra_tags=key
-            return redirect(f'/admin/edit/{id}')
-        this_user = User.objects.get(id=id)
-        this_user.first_name =  request.POST['first_name']
-        this_user.last_name = request.POST['last_name']
-        this_user.user_level = request.POST['user_level']
-        this_user.email = request.POST['email']
-        this_user.save()
-        return redirect('/dashboard/admin')
-
-def edit_user_password(request, id):
-    if request.method == 'POST':
-        this_user = User.objects.get(id=id)
-        errors = User.objects.password_edit_validator(request.POST)
-        if len(errors) > 0 :
-            for k, v in errors.items():
-                messages.error(request, v)#extra_tags=key
-            return redirect(f'/admin/edit/{id}')
-
-        password = request.POST['password']
-        pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-        print(pw_hash)
-        this_user.password = pw_hash
-        this_user.confirm_pw = request.POST['confirm_pw']
-        this_user.save()
-        return redirect('/dashboard/admin')
-    return redirect('/')
 
 def add_post_user(request, id):
     #add a post to user
@@ -236,20 +219,18 @@ def add_post_user(request, id):
         )
         logged_user.posts_made.add(create_post)
         show_user.added_posts.add(create_post)
-        return redirect(f'/users/show/{id}')
+        request.session['show_user_id'] = show_user.id
+        return redirect(f'/users/posts/{id}')
 
+def delete_comment(request, id):
+    comment = Post.objects.get(id=id)
+    comment.delete()
+    num = request.session['show_user_id']
+    return redirect(f'/users/posts/{num}')
 
-def remove_user(request, number):
-    if request.method=='GET':
-        user = User.objects.get(id=number)
-        if request.session['user_id'] == id or user.user_level is True:
-            user.delete()
-            return redirect('/dashboard/admin')
-        return redirect('/dashboard/admin')
 
 def logout(request):
     request.session.flush()
     return redirect('/')
-# Create your views here.
 
 # Create your views here.

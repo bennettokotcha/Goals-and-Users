@@ -18,18 +18,18 @@
                     <a class="nav-link active" href="/td/goals">Goals</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/edit/{{request.session.user_id}">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}}">
                         Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/post-page/{{request.session.user_id}}}">
+                    <a class="nav-link" href="/users/posts/{{request.session.user_id}}">
                         Posts
                     </a>
                 </li>
             </ul>
             <p class="mt-2">
-                Welcome, {{request.session.first_name}}  |   
+                Welcome, {{request.session.user_name}}   |   
                 <a href="/logout" class="me-4 text-blue">Log-Off</a>
             </p>
         </div>
@@ -49,7 +49,7 @@
     </div>
     <h1 class="container text-white text-center fw-bold mt-4">Lets Make it Happen!</h1>
     <h4 class="text-center text-white  fst-italic mt-4">(Add to list of goals or dreams by "creating a goal")</h4>
-    <table class="container mt-5 table table-striped table-hover bg-light rounded">
+    <table class="container mt-5 table table-striped table-hover bg-light rounded mb-5">
         <tr>
             <th>Goal</th>
             <th>Added on</th>
@@ -61,16 +61,18 @@
             <td>{{goals.goal}}</td>
             <td class="fw-lighter">{{goals.created_at}}</td>
             <td class="col-2">
-                <a href="/wishes/edit/{{wishes.id}}">Edit</a> |
+                <a href="/edit-goal/{{goals.id}}">Edit</a> |
                 <a href="/goals/{{goals.id}}/achieved">Achieve!</a>
             </td>
             {% endif %}
         {% endfor %}
         </tr>
     </table>
-    <h1 class="text-center text-white fw-bold mt-5">Goals Achieved:</h1>
+        <h1 class="text-center text-white fw-bold mt-5">Goals Achieved:</h1>
+    <div style='max-height: 350px; max-width: 1300px;' class="container overflow-scroll rounded">
         <table class="container mt-5 table table-striped table-hover bg-light rounded">
             <tr>
+                <th>Username</th>
                 <th>Goal</th>
                 <th>Dreamer</th>
                 <th>Date added</th>
@@ -79,13 +81,17 @@
     {% for user in all_users %}
         {% for goal in user.dreams_acheived.all %}
             <tr>
+                <td> 
+                    <a class="fw-bold text-primary" href="/users/posts/{{user.id}}">{{user.username}}</a>
+                </td>
                 <td>{{goal.goal}}</td>
                 <td>{{goal.dreamer.first_name}} {{goal.dreamer.last_name}}</td>
-                <td class="fw-lighter">{{goal.created_at}}</td>
+                <td class="fw-lighter col-2">{{goal.created_at}}</td>
                 <td class="fw-bold text-success">{{goal.updated_at}}</td>
         {% endfor %}
     {% endfor %}
             </tr>
         </table>
+    </div>
 </body>
 </html>
