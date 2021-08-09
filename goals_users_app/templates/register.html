@@ -26,10 +26,10 @@
     <div class="container d-flex text-white justify-content-evenly mb-3 mt-5 p-2">
         <div>
             <h2 class="mb-4">Registration</h2>
-            <form action="/register-user" method="POST">
+            <form action="/register" method="POST">
                 {% csrf_token %}
                 <label for="first_name" class="form-label">First Name</label>
-                <input class="form-control text-secondary" value='first_name' type="text" name="first_name">
+                <input class="form-control text-secondary" value="first_name" type="text" name="first_name">
 
                 <label for="last_name" class="form-label">Last Name</label>
                 <input type="text" name="last_name" value="last_name" class="form-control text-secondary" id="">

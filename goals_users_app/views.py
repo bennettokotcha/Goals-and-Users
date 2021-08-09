@@ -70,11 +70,11 @@ def register_user(request):
         user = User.objects.filter(email = request.POST['email'])
         if user:
             messages.error(request, 'Email already exist, please register with a different email address!')
-            return redirect('/register')
+            return redirect('/')
         if len(errors) > 0 :
             for k, v in errors.items():
                 messages.error(request, v)#extra_tags=key
-            return redirect('/register')
+            return redirect('/')
         else:
             password = request.POST['password']
             pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -92,7 +92,7 @@ def register_user(request):
             request.session['user_id'] = user.id
             request.session['user_name']= user.username
             request.session['first_name']= user.first_name
-        return redirect('/userdashboard')
+            return redirect('/userdashboard')
 
 def login_process(request):
     if request.method == 'POST':

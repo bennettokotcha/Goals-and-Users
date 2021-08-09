@@ -6,7 +6,7 @@ urlpatterns = [
     path('', views.register_page),
     path('login', views.login_page),
     path('login-user', views.login_process),
-    path('register-user', views.register_user),
+    path('register', views.register_user),
     path('userdashboard', views.userdashboard_page),
     path('td/goals', views.goals_page),
     path('create-goal', views.create_goal_page),

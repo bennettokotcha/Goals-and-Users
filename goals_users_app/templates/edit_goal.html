@@ -15,7 +15,7 @@
             <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/td/goals">Goals</a>
+                    <a class="nav-link active" href="/td/goals">Goals</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/users/edit/{{request.session.user_id}}">
@@ -34,7 +34,7 @@
             </p>
         </div>
     </nav>
-    <p class="container border border-1 border-dark p-2 mb-3 rounded">
+    <p class="container border border-1  border-dark p-2 mb-3 rounded">
         <span class="fw-bold fs-5">All users:</span> 
         <span class="fst-italic fw-lighter">
             (Only Logged-Users can render this page with a GET request if they are currently logged in.)
@@ -55,7 +55,7 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <form class="container col-5 border border-2 border-danger mt-5 p-3 rounded" action="/goals/{{goal.id}}/edit" method="POST">
+    <form class="container col-5 bg-light border border-2  border-danger mt-5 p-3 rounded" action="/goals/{{goal.id}}/edit" method="POST">
         {% csrf_token %}
         <h3 class="container fw-bold text-center mt-3 mb-4">Make changes:</h3>
         <input class="container form-control text-secondary text-wrap" value="{{goal.goal}}" name="goal" style="height:135px; width:65%;"></input>
