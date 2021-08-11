@@ -12,7 +12,7 @@
 <body class="bg-img" style="background-image: url('https://static.parade.com/wp-content/uploads/2019/12/goals-quotes.jpg');">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Home</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="/td/goals">Goals</a>
@@ -54,8 +54,8 @@
             <th>Goal</th>
             <th>Added on</th>
             <th>Actions</th>
-        {% for goals in user.dreams_made.all %}
-            {% if not goals in user.dreams_acheived.all %}
+        {% for goals in logged_user.dreams_made.all %}
+            {% if not goals in logged_user.dreams_acheived.all %}
         </tr>
         <tr>
             <td>{{goals.goal}}</td>
@@ -84,7 +84,18 @@
                 <td> 
                     <a class="fw-bold text-primary" href="/users/posts/{{user.id}}">{{user.username}}</a>
                 </td>
-                <td>{{goal.goal}}</td>
+                <td>
+                    {{goal.goal}}
+        {% if not goal in logged_user.liked_goals.all %}
+                    <p class="d-inline" style="font-size: smaller;">
+                        <a class='favorites' href="/add-likes/{{goal.id}}">Favorite</a>
+                    </p>
+        {% else %}
+                    <p class="d-inline" style="font-size: smaller;">
+                        <a href="/remove-like/{{this_book.id}}">Un-Favorite</a>
+                    </p>
+        {% endif %}
+                </td>
                 <td>{{goal.dreamer.first_name}} {{goal.dreamer.last_name}}</td>
                 <td class="fw-lighter col-2">{{goal.created_at}}</td>
                 <td class="fw-bold text-success">{{goal.updated_at}}</td>

@@ -55,11 +55,10 @@ class UserManager(models.Manager):
 
     def goal_validator(self, postData):
         errors = {}
-        if len(postData['goal']) < 3:
-            errors['item'] = 'A GOAL must consist of 3 characters!'
+        if len(postData['goal']) < 5:
+            errors['goal'] = 'A GOAL must consist of 5 characters!'
         return errors
     
-
     #users_created = []
 
 class User(models.Model):
@@ -77,8 +76,10 @@ class User(models.Model):
     # posts_made = []
     # dreams_acheived = []
     # dreams_made = []
+    # liked_goals = []
 
 class Goal(models.Model):
+    users_who_like = models.ManyToManyField(User, related_name='liked_goals') #favorites
     dreamer = models.ForeignKey(User, related_name='dreams_made', on_delete=models.CASCADE)
     users_who_dream = models.ManyToManyField(User, related_name='dreams_acheived')
     goal = models.CharField(max_length=200)

@@ -12,7 +12,7 @@
 <body class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2495&q=80');">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Home</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="/td/goals">Goals</a>
@@ -55,10 +55,10 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <form class="container col-5 bg-light border border-2  border-danger mt-5 p-3 rounded" action="/goals/{{goal.id}}/edit" method="POST">
+    <form class="container col-5 bg-light border border-2  border-danger mt-5 p-4 rounded" action="/goals/{{goal.id}}/edit" method="POST">
         {% csrf_token %}
-        <h3 class="container fw-bold text-center mt-3 mb-4">Make changes:</h3>
-        <input class="container form-control text-secondary text-wrap" value="{{goal.goal}}" name="goal" style="height:135px; width:65%;"></input>
+        <h3 class="container fw-bold text-center mb-4">Make changes:</h3>
+        <textarea name="goal" class="form-control text-secondary" cols="10" rows="4">{{goal.goal}}</textarea>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
             <button type="reset" class="btn-danger text-center col-3 p-2 fw-bold rounded">Cancel</button>
             <button type="submit" class="btn-success text-center col-3 p-2 fw-bold rounded">Edit</button>

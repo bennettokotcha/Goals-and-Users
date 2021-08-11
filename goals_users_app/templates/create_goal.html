@@ -12,13 +12,13 @@
 <body class="bg-img" style="background-image: url('https://static.parade.com/wp-content/uploads/2019/12/goals-quotes.jpg');">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Home</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="/td/goals">Goals</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/edit/{{request.session.user_id}">
+                    <a class="nav-link" href="/users/edit/{{request.session.user_id}}">
                         Profile
                     </a>
                 </li>
@@ -57,7 +57,7 @@
     <form class="container col-5 bg-light mt-5 p-3 rounded" action="/create-goal/process" method="POST">
         {% csrf_token %}
         <h3 class="container fw-bold text-center mt-3 mb-4">Lets make this thing official!</h3>
-        <input class="container form-control text-secondary text-wrap" value="Create your next goal here" name="goal" style="height:135px; width:65%;"></input>
+        <textarea name="goal" class="form-control" value="Create your next goal here" cols="10" rows="4"></textarea>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
             <button type="reset" class="btn-danger text-center col-3 p-2 fw-bold rounded">Cancel</button>
             <button type="submit" class="btn-success text-center col-3 p-2 fw-bold rounded">Create</button>

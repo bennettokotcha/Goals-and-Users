@@ -11,7 +11,7 @@
 <body class="bg-img" style="background-image: url('https://images.wallpaperscraft.com/image/3d_balls_rendering_lines_105159_1280x720.jpg');">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Dashboard</a>
+            <a class="navbar-brand ms-2 fw-bold" href="/userdashboard">Home</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/td/goals">Goals</a>
@@ -71,19 +71,19 @@
                 {% csrf_token %}
                 <h5 class="mb-5 fw-bold">Change Password</h5>
                 <label for="password" class="form-label">Password:</label>
-                <input class="form-control" type="password" name="password" value="">
+                <input class="form-control text-secondary" type="password" name="password" placeholder="new-password">
     
                 <label for="confirm_pw" class="form-label">Password Confirmation:</label>
-                <input type="password" name="confirm_pw" class="form-control" value=''>
+                <input type="password" name="confirm_pw" class="form-control text-secondary" placeholder="re-type password">
     
                 <button type="submit" class="mt-3 fw-bold mb-5 btn-success col-10 p-2 text-center rounded">Update Password</button>
             </form>
         </div>
-        <form class="border border-2 border-danger rounded container text-white p-2" action="/edit-d/{{request.session.user_id}}/proccess" method="POST">
+        <form class="border border-2 border-danger mt-5 rounded container text-white p-2" action="/edit-d/{{request.session.user_id}}/proccess" method="POST">
             {% csrf_token %}
             <h5 class="mb-3 fw-bold">Set Status</h5>
             <label for="desc" class="form-label">Status:</label>
-            <textarea name="desc" class="form-control" cols="20" rows="10"></textarea>
+            <textarea name="desc" class="form-control" cols="20" rows="2" placeholder="{{user.desc}}"></textarea>
             <button type="submit" class="mt-3 fw-bold btn-success text-center col-1 p-2 rounded">Save</button>
         </form>
 </body>

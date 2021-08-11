@@ -11,7 +11,7 @@
 <body class="bg-img" style="background-image: url('https://www.wallpaperup.com/uploads/wallpapers/2015/05/07/681069/a7cc90b98637a59ec4cec58a71ec36c7-1400.jpg');">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 text-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 fw-bold active" href="/userdashboard">Dashboard</a>
+            <a class="navbar-brand ms-2 fw-bold active" href="/userdashboard">Home</a>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/td/goals">Goals</a>
@@ -33,12 +33,19 @@
             </p>
         </div>
     </nav>
+    <div class="container d-flex justify-content-end">
+        <a class="btn btn-primary fw-bold" role="button" href="/userdashboard">Return to Dreamers</a>
+    </div>
     <div class="container mt-5 text-dark bg-light rounded">
         <h1 class="mb-3">{{show_user.first_name}} {{show_user.last_name}}</h1>
         <p class="p-2 mb-2 fst-italic text-primary">Registered at: <span class="fst-normal  text-dark fw-bold">{{show_user.created_at}}</span></p>
         <p class="p-2 mb-2 fst-italic text-primary">User ID: <span class="fst-normal  text-dark fw-bold">{{show_user.id}}</span></p>
         <p class="p-2 mb-2 fst-italic text-primary">Email address: <span class="fst-normal  text-dark fw-bold">{{show_user.email}}</span></p>
-        <p class="p-2 mb-2 fst-italic text-primary">Description: <span class="fs-4  text-dark">{{show_user.desc}}</span></p>
+        <p class="p-2 mb-2 fst-italic text-primary fw-bold">STATUS:
+            <span class="text-primary fw-light">(Are you making your dreams come true?)</span>:
+            <br>
+            <span class="fs-4  fw-normal text-dark">{{show_user.desc}}</span>
+        </p>
     </div>
     
     <form action="/add-post/{{show_user.id}}" method="POST" class="container text-white rounded p-5 mt-4">

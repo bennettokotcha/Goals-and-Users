@@ -42,7 +42,7 @@ def goals_page(request):
     context = {
         'all_goals': Goal.objects.all(),
         'all_users': User.objects.all(),
-        'user': User.objects.get(id=request.session['user_id'])
+        'logged_user': User.objects.get(id=request.session['user_id'])
     }
     return render(request, 'goals.html', context)
     
@@ -141,15 +141,16 @@ def achieve_goal(request, id):
         goal.save()
         return redirect('/td/goals')
 
+
 def edit_goal(request, id):
     errors = Goal.objects.goal_validator(request.POST)
     if len(errors) > 0 :
         for k, v in errors.items():
             messages.error(request, v)
-        return redirect(f'/goals/{id}/edit')
+        return redirect(f'/edit-goal/{id}')
 
     goal = Goal.objects.get(id=id)
-    goal.goal = request.POST['goal']
+    goal.goal = request.POST["goal"]
     goal.save()
     return redirect('/td/goals')
 
@@ -221,6 +222,12 @@ def add_post_user(request, id):
         show_user.added_posts.add(create_post)
         request.session['show_user_id'] = show_user.id
         return redirect(f'/users/posts/{id}')
+
+def add_likes(request, id):
+    user = User.objects.get(id=request.session['user_id'])
+    goal = Goal.objects.get(id=id)
+    user.liked_goals.add(goal)
+    return redirect('/td/goals')
 
 def delete_comment(request, id):
     comment = Post.objects.get(id=id)
