@@ -58,7 +58,12 @@ class UserManager(models.Manager):
         if len(postData['goal']) < 5:
             errors['goal'] = 'A GOAL must consist of 5 characters!'
         return errors
-    
+
+    def post_validator(self, postData):
+        errors = {}
+        if len(postData['message']) < 2:
+            errors['message'] = 'A comment must be at least 2 characters'
+        return errors    
     #users_created = []
 
 class User(models.Model):

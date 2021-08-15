@@ -50,7 +50,7 @@
     {% if messages %}
     <ul class='container justify-content-center'>
         {% for message in messages %}
-        <li class='text-danger' {% if message.tags %} class="{{message.tags}}"{% endif %}>{{message}}</li>
+        <li class='text-danger fs-5' {% if message.tags %} class="{{message.tags}}"{% endif %}>{{message}}</li>
         {% endfor %}
     </ul>
     {% endif %}

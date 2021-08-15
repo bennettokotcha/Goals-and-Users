@@ -74,6 +74,7 @@
             <tr>
                 <th>Username</th>
                 <th>Goal</th>
+                <th>#Favorites</th>
                 <th>Dreamer</th>
                 <th>Date added</th>
                 <th>Date Achieved</th>
@@ -82,20 +83,21 @@
         {% for goal in user.dreams_acheived.all %}
             <tr>
                 <td> 
-                    <a class="fw-bold text-primary" href="/users/posts/{{user.id}}">{{user.username}}</a>
+                    <a class="fw-bold fs-5 text-primary" href="/users/posts/{{user.id}}">{{user.username}}</a>
                 </td>
                 <td>
                     {{goal.goal}}
         {% if not goal in logged_user.liked_goals.all %}
                     <p class="d-inline" style="font-size: smaller;">
-                        <a class='favorites' href="/add-likes/{{goal.id}}">Favorite</a>
+                        <a class='ms-3 text-info fw-bold' href="/add-likes/{{goal.id}}">Favorite</a>
                     </p>
         {% else %}
                     <p class="d-inline" style="font-size: smaller;">
-                        <a href="/remove-like/{{this_book.id}}">Un-Favorite</a>
+                        <a class='ms-3 text-secondary fw-bold' href="/remove-like/{{goal.id}}">Un-Favorite</a>
                     </p>
         {% endif %}
                 </td>
+                <td> <span class="fs-5 fst-italic">{{goal.users_who_like.all|length}}</span></td>
                 <td>{{goal.dreamer.first_name}} {{goal.dreamer.last_name}}</td>
                 <td class="fw-lighter col-2">{{goal.created_at}}</td>
                 <td class="fw-bold text-success">{{goal.updated_at}}</td>

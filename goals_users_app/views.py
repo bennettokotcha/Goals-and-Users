@@ -20,6 +20,9 @@ def edit_goal_page(request, id):
     if not 'user_name' in request.session:
         messages.error(request, 'Must be logged-in or registered in order to continue')
         return redirect('/login')
+    if not 'user_id' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/login')
     context = {
         'goal' : Goal.objects.get(id=id),
     }
@@ -52,9 +55,13 @@ def user_edit_page(request, id):
             'user': User.objects.get(id=id)
         } 
         return render(request, 'edit_profile.html', context)
+    messages.error(request, 'Can not edit another users profile!')
     return redirect('/login')
 
 def posts_page(request, id):
+    if not 'user_name' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/')
     show_user = User.objects.get(id=id)
     context = {
         'show_user' : User.objects.get(id=id),
@@ -143,6 +150,14 @@ def achieve_goal(request, id):
 
 
 def edit_goal(request, id):
+    logged_user = User.objects.get(id=request.session['user_id'])
+    goal =  Goal.objects.get(id=id)
+    if not goal in logged_user.dreams_made.all(): 
+        messages.error(request, 'Because you didnt create this goal, you can not make any changes. Sorry!')
+        return redirect(f'/edit-goal/{id}')
+    if goal in logged_user.dreams_acheived.all():
+        messages.error(request, 'Cannot edit a goal that has already been achieved..Sorry!')
+        return redirect(f'/edit-goal/{id}')
     errors = Goal.objects.goal_validator(request.POST)
     if len(errors) > 0 :
         for k, v in errors.items():
@@ -208,8 +223,16 @@ def edit_desc_proccess(request, id):
 
 
 def add_post_user(request, id):
+    if not 'user_name' in request.session:
+        messages.error(request, 'Must be logged-in or registered in order to continue')
+        return redirect('/')
     #add a post to user
     if request.method == 'POST':
+        errors = Post.objects.post_validator(request.POST)
+        if len(errors) > 0 :
+            for k, v in errors.items():
+                messages.error(request, v)
+            return redirect(f'/users/posts/{id}')
         show_user = User.objects.get(id=id)
         num = request.session['user_id']
         logged_user = User.objects.get(id = num)
@@ -227,6 +250,12 @@ def add_likes(request, id):
     user = User.objects.get(id=request.session['user_id'])
     goal = Goal.objects.get(id=id)
     user.liked_goals.add(goal)
+    return redirect('/td/goals')
+
+def remove_likes(request, id):
+    logged_user = User.objects.get(id=request.session['user_id'])
+    goal = Goal.objects.get(id=id)
+    logged_user.liked_goals.remove(goal)
     return redirect('/td/goals')
 
 def delete_comment(request, id):

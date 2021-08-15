@@ -22,6 +22,7 @@ urlpatterns = [
     path('edit-d/<int:id>/proccess', views.edit_desc_proccess),
     path('add-post/<int:id>', views.add_post_user),
     path('add-likes/<int:id>', views.add_likes),
+    path('remove-like/<int:id>', views.remove_likes),
     path('delete-comment/<int:id>', views.delete_comment),
     path('logout', views.logout),
 ]

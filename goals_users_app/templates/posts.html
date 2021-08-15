@@ -33,12 +33,20 @@
             </p>
         </div>
     </nav>
+    <p class="container border border-1 border-light text-white p-2 rounded">
+        <span class="fw-bold fs-5">All users:</span> 
+        <span class="fst-italic fw-lighter">
+            (Only Logged-Users can render this page with a GET request if they are currently logged in.)
+        </span>
+        Users can post a message for visted-users-page. If you are the user that leaves
+        the post youll always have the option to delete the your own message.
+    </p>
     <div class="container d-flex justify-content-end">
         <a class="btn btn-primary fw-bold" role="button" href="/userdashboard">Return to Dreamers</a>
     </div>
     <div class="container mt-5 text-dark bg-light rounded">
         <h1 class="mb-3">{{show_user.first_name}} {{show_user.last_name}}</h1>
-        <p class="p-2 mb-2 fst-italic text-primary">Registered at: <span class="fst-normal  text-dark fw-bold">{{show_user.created_at}}</span></p>
+        <p class="p-2 mb-2 fst-italic text-primary">Updated at: <span class="fst-normal  text-dark fw-bold">{{show_user.updated_at}}</span></p>
         <p class="p-2 mb-2 fst-italic text-primary">User ID: <span class="fst-normal  text-dark fw-bold">{{show_user.id}}</span></p>
         <p class="p-2 mb-2 fst-italic text-primary">Email address: <span class="fst-normal  text-dark fw-bold">{{show_user.email}}</span></p>
         <p class="p-2 mb-2 fst-italic text-primary fw-bold">STATUS:
@@ -57,8 +65,15 @@
     
         <button type="submit" class="container mt-3 fw-bold mb-5 btn-success text-center col-1 p-2 rounded me-5">Post</button>
     </form>
+    {% if messages %}
+    <ul class='container'>
+        {% for message in messages %}
+        <li class='text-danger fs-5' {% if message.tags %} class="{{message.tags}}"{% endif %}>{{message}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% if show_user.added_posts.all %}
-    <div class="container text-white border border-2 border-success rounded p-2 mt-4">
+    <div class="container text-white border border-4 border-success rounded p-2 mt-4">
         {% for post in all_posts %}
             {% if post in show_user.added_posts.all %}      
         <p class="fs-5 fw-bolder fst-italic mb-5">
